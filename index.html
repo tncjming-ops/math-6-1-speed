@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>六上數學教學動畫｜第7單元 速率 ＆ 第8單元 數量關係</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, sans-serif;
+      background: #070c1a;
+      color: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .nav-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      background: #0b132b;
+      border-bottom: 2px solid #263963;
+      flex-wrap: wrap;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .nav-title {
+      font-weight: 900;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fbbf24;
+    }
+
+    .unit-tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .unit-btn {
+      background: #162344;
+      border: 2px solid #2e4372;
+      color: #cbd5e1;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .unit-btn:hover {
+      background: #1f3261;
+      color: #fff;
+    }
+
+    .unit-btn.active-u7 {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      border-color: #fbbf24;
+      color: #0b132b;
+      box-shadow: 0 4px 16px rgba(251, 191, 36, 0.35);
+    }
+
+    .unit-btn.active-u8 {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      border-color: #a78bfa;
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+    }
+
+    .viewport {
+      position: relative;
+      flex: 1;
+      width: 100%;
+    }
+
+    iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: none;
+    }
+
+    iframe.visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <header class="nav-header">
+    <div class="nav-title">
+      <span>🎓 國小六年級上學期數學｜3分鐘精華動畫館</span>
+    </div>
+    <div class="unit-tabs">
+      <button class="unit-btn active-u7" id="btnU7">🚀 第 7 單元：速率大冒險</button>
+      <button class="unit-btn" id="btnU8">🔢 第 8 單元：數量關係大解密</button>
+    </div>
+  </header>
+
+  <main class="viewport">
+    <iframe id="frameU7" src="unit7.html" class="visible" title="第7單元：速率大冒險"></iframe>
+    <iframe id="frameU8" src="unit8/h.html" title="第8單元：數量關係大解密"></iframe>
+  </main>
+
+  <script>
+    const btnU7 = document.getElementById("btnU7");
+    const btnU8 = document.getElementById("btnU8");
+    const frameU7 = document.getElementById("frameU7");
+    const frameU8 = document.getElementById("frameU8");
+
+    function switchUnit(unit) {
+      if (unit === 7) {
+        try { frameU8.contentWindow.postMessage({ type: "pause" }, "*"); } catch (e) {}
+        frameU7.classList.add("visible");
+        frameU8.classList.remove("visible");
+        btnU7.className = "unit-btn active-u7";
+        btnU8.className = "unit-btn";
+      } else {
+        try { frameU7.contentWindow.postMessage({ type: "pause" }, "*"); } catch (e) {}
+        frameU8.classList.add("visible");
+        frameU7.classList.remove("visible");
+        btnU7.className = "unit-btn";
+        btnU8.className = "unit-btn active-u8";
+      }
+    }
+
+    btnU7.addEventListener("click", () => switchUnit(7));
+    btnU8.addEventListener("click", () => switchUnit(8));
+  </script>
+</body>
+</html>

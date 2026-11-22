@@ -1,0 +1,1249 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>六上數學 第7單元｜速率大冒險（3分鐘教學動畫）</title>
+  <style>
+    :root {
+      --bg-dark: #0b132b;
+      --bg-stage: #121f3d;
+      --card-bg: #1c2d52;
+      --border: #2e4372;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --gold: #fbbf24;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --coral: #fb7185;
+      --violet: #a78bfa;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #1b2a4e 0%, #090e1d 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      user-select: none;
+    }
+
+    .player-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-stage);
+      border: 2px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 22px;
+      background: rgba(11, 19, 43, 0.85);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      letter-spacing: 0.5px;
+    }
+
+    .brand .badge {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #0b132b;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .scene-pill {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    /* Stage */
+    .stage-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(180deg, #132245 0%, #0d1730 100%);
+      overflow: hidden;
+    }
+
+    /* Subtle grid background */
+    .stage-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .scene-canvas {
+      position: absolute;
+      inset: 0;
+      padding: 28px 36px 96px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Start Overlay */
+    .start-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 14, 29, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 0.35s ease;
+    }
+
+    .start-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .start-overlay h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #fbbf24, #38bdf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .start-overlay p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 560px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .big-play-btn {
+      background: linear-gradient(135deg, #f59e0b, #fbbf24);
+      color: #0b132b;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 999px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(251, 191, 36, 0.35);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .big-play-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 14px 36px rgba(251, 191, 36, 0.5);
+    }
+
+    /* Subtitles Bar */
+    .subtitle-bar {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 920px;
+      background: rgba(9, 14, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+      line-height: 1.55;
+      color: #fff;
+      z-index: 20;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+      transition: opacity 0.25s ease;
+    }
+
+    .subtitle-bar.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    /* Controls */
+    .controls {
+      background: rgba(11, 19, 43, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .time-label {
+      font-variant-numeric: tabular-nums;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 44px;
+    }
+
+    .progress-track {
+      position: relative;
+      flex: 1;
+      height: 10px;
+      background: #1e293b;
+      border-radius: 999px;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--cyan));
+      border-radius: 999px;
+      transition: width 0.08s linear;
+    }
+
+    .chapter-tabs {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .chap-btn {
+      background: #1a2747;
+      border: 1px solid #2e4372;
+      color: var(--text-muted);
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chap-btn:hover {
+      background: #253863;
+      color: #fff;
+    }
+
+    .chap-btn.active {
+      background: rgba(251, 191, 36, 0.18);
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .btn-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      background: #1e2f54;
+      border: 1px solid #354c80;
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: #2b4170;
+    }
+
+    .ctrl-btn.primary {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #0b132b;
+    }
+
+    .ctrl-btn.primary:hover {
+      background: #f59e0b;
+    }
+
+    /* Scene Graphic Components */
+    .scene-title {
+      font-size: clamp(1.35rem, 2.5vw, 2rem);
+      font-weight: 900;
+      margin-bottom: 18px;
+      text-align: center;
+      color: var(--gold);
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .card {
+      background: rgba(28, 45, 82, 0.88);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 24px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .formula-box {
+      background: rgba(11, 19, 43, 0.8);
+      border: 2px solid var(--cyan);
+      border-radius: 14px;
+      padding: 12px 24px;
+      font-size: clamp(1.1rem, 2vw, 1.55rem);
+      font-weight: 900;
+      color: #fff;
+      text-align: center;
+      box-shadow: 0 0 24px rgba(56, 189, 248, 0.25);
+    }
+
+    .highlight-gold { color: var(--gold); }
+    .highlight-cyan { color: var(--cyan); }
+    .highlight-emerald { color: var(--emerald); }
+    .highlight-coral { color: var(--coral); }
+
+    /* Track Animation */
+    .track-box {
+      width: 100%;
+      max-width: 820px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .lane {
+      position: relative;
+      height: 64px;
+      background: #263554;
+      border-radius: 12px;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      overflow: hidden;
+    }
+
+    .finish-line {
+      position: absolute;
+      right: 54px;
+      top: 0;
+      bottom: 0;
+      width: 8px;
+      background: repeating-linear-gradient(
+        0deg,
+        #fff 0px, #fff 8px,
+        #0b132b 8px, #0b132b 16px
+      );
+    }
+
+    .runner {
+      position: absolute;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 800;
+      font-size: 1rem;
+      transition: left 0.08s linear;
+    }
+
+    .runner-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    /* 3 Brothers Grid */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      width: 100%;
+      max-width: 920px;
+    }
+
+    .brother-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, border-color 0.3s ease;
+    }
+
+    .brother-card.dim {
+      opacity: 0.25;
+      transform: scale(0.92);
+    }
+
+    .brother-card.pop {
+      opacity: 1;
+      transform: scale(1.03);
+      border-color: var(--gold);
+      box-shadow: 0 0 28px rgba(251, 191, 36, 0.25);
+    }
+
+    /* Magic Pyramid */
+    .pyramid-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 44px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    /* Gear Conversion */
+    .gear-flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .unit-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .unit-node {
+      background: #1c2d52;
+      border: 2px solid var(--cyan);
+      border-radius: 14px;
+      padding: 12px 22px;
+      font-size: 1.25rem;
+      font-weight: 900;
+      min-width: 120px;
+      text-align: center;
+    }
+
+    .op-badge {
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-weight: 900;
+      font-size: 0.95rem;
+    }
+
+    .op-div { background: rgba(251, 113, 133, 0.2); border: 1.5px solid var(--coral); color: var(--coral); }
+    .op-mul { background: rgba(52, 211, 153, 0.2); border: 1.5px solid var(--emerald); color: var(--emerald); }
+
+    /* Trap Cards */
+    .trap-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      width: 100%;
+      max-width: 920px;
+    }
+
+    .trap-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .trap-card.active {
+      border-color: var(--gold);
+      box-shadow: 0 0 28px rgba(251, 191, 36, 0.2);
+    }
+
+    .wrong-box {
+      background: rgba(251, 113, 133, 0.14);
+      border: 1.5px solid var(--coral);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: #fecdd3;
+      font-weight: 700;
+    }
+
+    .right-box {
+      background: rgba(52, 211, 153, 0.14);
+      border: 1.5px solid var(--emerald);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: #a7f3d0;
+      font-weight: 700;
+    }
+
+    /* Summary Cards */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .sum-item {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      opacity: 0.25;
+      transform: translateY(10px);
+      transition: all 0.35s ease;
+    }
+
+    .sum-item.show {
+      opacity: 1;
+      transform: translateY(0);
+      border-color: var(--emerald);
+    }
+
+    .sum-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--gold);
+      color: #0b132b;
+      font-weight: 900;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.04); }
+    }
+
+    .pulse {
+      animation: pulseGlow 1.6s infinite ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <div class="player-shell" id="playerShell">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="brand">
+        <span class="badge">六上數學 Ch.7</span>
+        <span>🚀 速率大冒險：3分鐘觀念全攻略</span>
+      </div>
+      <div class="scene-pill" id="scenePill">準備播放</div>
+    </div>
+
+    <!-- Main Animation Stage -->
+    <div class="stage-wrapper" id="stageWrapper">
+      <div class="scene-canvas" id="sceneCanvas"></div>
+
+      <!-- Start Overlay -->
+      <div class="start-overlay" id="startOverlay">
+        <h1>🚀 速率大冒險！</h1>
+        <p>
+          從頭到尾帶六年級小朋友一次搞懂「秒速、分速、時速」、<br />
+          「神奇公式金字塔」、「單位換算口訣」與「考試必避陷阱」！
+        </p>
+        <button class="big-play-btn" id="bigPlayBtn">
+          <span>▶</span> 開始播放動畫（約 3 分鐘）
+        </button>
+      </div>
+
+      <!-- Subtitles -->
+      <div class="subtitle-bar" id="subtitleBar">點擊「開始播放動畫」即可同步收看口白與動畫！</div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <div class="timeline-row">
+        <span class="time-label" id="currTimeLabel">00:00</span>
+        <div class="progress-track" id="progressTrack" title="點擊跳轉進度">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="time-label" id="totalTimeLabel">03:06</span>
+      </div>
+
+      <div class="chapter-tabs" id="chapterTabs"></div>
+
+      <div class="btn-row">
+        <div class="btn-group">
+          <button class="ctrl-btn primary" id="playPauseBtn">▶ 播放</button>
+          <button class="ctrl-btn" id="prevBtn">⏮ 上一段</button>
+          <button class="ctrl-btn" id="nextBtn">下一段 ⏭</button>
+          <button class="ctrl-btn" id="replayBtn">🔄 重播</button>
+        </div>
+        <div class="btn-group">
+          <button class="ctrl-btn" id="speedBtn">語速 1.0x</button>
+          <button class="ctrl-btn" id="subToggleBtn">💬 字幕：開</button>
+          <button class="ctrl-btn" id="muteBtn">🔊 聲音：開</button>
+          <button class="ctrl-btn" id="fsBtn">⛶ 全螢幕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Scene definitions matching exact audio lengths generated from textbook Ch.7
+    const SCENES = [
+      {
+        id: "s01",
+        short: "1. 認識速率",
+        title: "什麼是速率？怎麼比快慢？",
+        audio: "audio/s01.mp3",
+        duration: 24.76,
+        subtitles: [
+          { t: 0.0, text: "各位六年級的小朋友大家好！歡迎來到數學小教室，今天我們要一起破解「速率」的秘密！" },
+          { t: 6.8, text: "操場上，介文和清吉都跑了 60 公尺，介文花 10 秒，清吉花 9 秒，時間越短跑得越快！" },
+          { t: 15.2, text: "那如果距離和時間都不一樣呢？算出「平均 1 秒鐘移動幾公尺」，就能公平比快慢，這就是「速率」！" }
+        ]
+      },
+      {
+        id: "s02",
+        short: "2. 速率種類",
+        title: "速率三兄弟：秒速、分速、時速",
+        audio: "audio/s02.mp3",
+        duration: 23.14,
+        subtitles: [
+          { t: 0.0, text: "認識速率三兄弟！平均每秒鐘移動的距離叫「秒速」，例如鴕鳥每秒跑 18 公尺，記作 18 公尺/秒。" },
+          { t: 8.8, text: "平均每分鐘移動的距離叫「分速」，像散步或騎腳踏車。" },
+          { t: 13.6, text: "平均每小時移動的距離叫「時速」，像開車或高鐵時速 300 公里！" },
+          { t: 19.0, text: "要記住喔，課本說的速率，指的都是「平均速率」！" }
+        ]
+      },
+      {
+        id: "s03",
+        short: "3. 公式金字塔",
+        title: "神奇公式金字塔",
+        audio: "audio/s03.mp3",
+        duration: 28.26,
+        subtitles: [
+          { t: 0.0, text: "算速率有三個黃金公式，記不住怎麼辦？快來畫一個「神奇金字塔」！距離在最頂端，速率和時間在下面。" },
+          { t: 8.5, text: "想算誰，就用手把它遮起來！遮住速率 → 「速率 ＝ 距離 ÷ 時間」。" },
+          { t: 16.5, text: "遮住距離，下面相乘 → 「距離 ＝ 速率 × 時間」。" },
+          { t: 22.0, text: "遮住時間 → 「時間 ＝ 距離 ÷ 速率」。超簡單吧！" }
+        ]
+      },
+      {
+        id: "s04",
+        short: "4. 單位換算",
+        title: "大魔王一：單位換算怎麼算？",
+        audio: "audio/s04.mp3",
+        duration: 33.74,
+        subtitles: [
+          { t: 0.0, text: "接下來是同學最容易卡關的「單位換算」！記住口訣：時間變小用除法，時間變大用乘法！" },
+          { t: 7.5, text: "時速換成 1 分鐘走多遠，時間變 60 分之一，要除以 60；分速換秒速，再除以 60！" },
+          { t: 15.0, text: "反過來，秒速換分速、分速換時速，就要乘以 60！" },
+          { t: 19.8, text: "如果碰到公里和公尺，別忘了 1 公里 ＝ 1000 公尺喔！" },
+          { t: 24.5, text: "例如時速 7.2 公里 → 7200 公尺/時 → 連除兩次 60 → 答案就是秒速 2 公尺！" }
+        ]
+      },
+      {
+        id: "s05",
+        short: "5. 必考陷阱",
+        title: "大魔王二：必考兩大陷阱！",
+        audio: "audio/s05.mp3",
+        duration: 29.26,
+        subtitles: [
+          { t: 0.0, text: "寫考卷時一定要小心這兩個超級陷阱！第一，比快慢之前，「單位一定要統一」！" },
+          { t: 7.0, text: "時速 75 公里和分速 1200 公尺，不能直接比大小，要把分速乘以 60 換成時速 72 公里，才能比出誰快！" },
+          { t: 16.0, text: "第二，算「平均速率」，千萬不可以把兩個速率加起來除以 2！" },
+          { t: 22.0, text: "一定要先算出總距離和總時間，再用「總距離 ÷ 總時間」，才不會掉進陷阱裡！" }
+        ]
+      },
+      {
+        id: "s06",
+        short: "6. 追趕與相遇",
+        title: "生活應用：追趕與相遇問題",
+        audio: "audio/s06.mp3",
+        duration: 24.15,
+        subtitles: [
+          { t: 0.0, text: "最後來看兩種常考的應用題。如果兩個人從同一個地方「同方向」出發，因為都在往前面跑，" },
+          { t: 7.2, text: "距離是慢慢拉開的，所以要先把「兩個人的速率相減」，再乘以時間！" },
+          { t: 13.0, text: "那如果是「面對面相向而行」，或是「背對背往反方向跑」，兩人會一起縮短或拉開距離，" },
+          { t: 19.5, text: "這時候就要把「兩個人的速率相加」來計算喔！" }
+        ]
+      },
+      {
+        id: "s07",
+        short: "7. 總複習",
+        title: "總複習與通關秘訣",
+        audio: "audio/s07.mp3",
+        duration: 23.28,
+        subtitles: [
+          { t: 0.0, text: "恭喜你！三分鐘速率大冒險破關啦！最後一起複習四個重點：" },
+          { t: 5.5, text: "一、認識秒速、分速、時速；二、善用距離在上的公式金字塔；" },
+          { t: 11.2, text: "三、單位換算要看清時間和長度；四、平均速率 ＝ 總距離 ÷ 總時間！" },
+          { t: 17.5, text: "只要多練習課本和習作的題目，你一定能成為速率小達人，加油！" }
+        ]
+      }
+    ];
+
+    const TOTAL_DURATION = SCENES.reduce((acc, s) => acc + s.duration, 0);
+
+    // Elements
+    const stageCanvas = document.getElementById("sceneCanvas");
+    const subtitleBar = document.getElementById("subtitleBar");
+    const scenePill = document.getElementById("scenePill");
+    const startOverlay = document.getElementById("startOverlay");
+    const bigPlayBtn = document.getElementById("bigPlayBtn");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const replayBtn = document.getElementById("replayBtn");
+    const speedBtn = document.getElementById("speedBtn");
+    const subToggleBtn = document.getElementById("subToggleBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const fsBtn = document.getElementById("fsBtn");
+    const progressTrack = document.getElementById("progressTrack");
+    const progressFill = document.getElementById("progressFill");
+    const currTimeLabel = document.getElementById("currTimeLabel");
+    const totalTimeLabel = document.getElementById("totalTimeLabel");
+    const chapterTabs = document.getElementById("chapterTabs");
+    const playerShell = document.getElementById("playerShell");
+
+    // State
+    let currentSceneIdx = 0;
+    let sceneElapsed = 0;
+    let isPlaying = false;
+    let playbackRate = 1.0;
+    let isMuted = false;
+    let showSubtitles = true;
+    let rafId = null;
+    let lastTimestamp = null;
+    let activeAudio = null;
+
+    // Gentle WebAudio chime for scene transitions
+    let audioCtx = null;
+    function playChime(freq = 587.33) {
+      if (isMuted) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.25, audioCtx.currentTime + 0.14);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.26);
+      } catch (e) {}
+    }
+
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+    }
+
+    totalTimeLabel.textContent = formatTime(TOTAL_DURATION);
+
+    // Build chapter buttons
+    SCENES.forEach((sc, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "chap-btn";
+      btn.textContent = sc.short;
+      btn.addEventListener("click", () => jumpToScene(idx, true));
+      chapterTabs.appendChild(btn);
+    });
+
+    function getGlobalTime() {
+      let sum = 0;
+      for (let i = 0; i < currentSceneIdx; i++) sum += SCENES[i].duration;
+      return sum + sceneElapsed;
+    }
+
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.onended = null;
+        activeAudio = null;
+      }
+    }
+
+    window.addEventListener("message", (ev) => {
+      if (ev.data && ev.data.type === "pause") {
+        isPlaying = false;
+        playPauseBtn.textContent = "▶ 播放";
+        if (activeAudio) activeAudio.pause();
+      }
+    });
+
+    function loadAndPlayAudio(idx, offsetSec = 0) {
+      stopAudio();
+      const sc = SCENES[idx];
+      const audio = new Audio(sc.audio);
+      audio.playbackRate = playbackRate;
+      audio.muted = isMuted;
+      audio.currentTime = Math.min(offsetSec, Math.max(0, sc.duration - 0.1));
+      audio.onended = () => {
+        if (!isPlaying) return;
+        if (currentSceneIdx < SCENES.length - 1) {
+          jumpToScene(currentSceneIdx + 1, true);
+        } else {
+          // Finished all 7 scenes
+          isPlaying = false;
+          playPauseBtn.textContent = "▶ 播放";
+          playChime(783.99);
+        }
+      };
+      activeAudio = audio;
+      if (isPlaying) {
+        audio.play().catch(() => {});
+      }
+    }
+
+    function jumpToScene(idx, autoPlay = true) {
+      currentSceneIdx = Math.max(0, Math.min(SCENES.length - 1, idx));
+      sceneElapsed = 0;
+      startOverlay.classList.add("hidden");
+      if (autoPlay) {
+        isPlaying = true;
+        playPauseBtn.textContent = "⏸ 暫停";
+      }
+      playChime();
+      loadAndPlayAudio(currentSceneIdx, 0);
+      renderFrame();
+    }
+
+    function togglePlay() {
+      startOverlay.classList.add("hidden");
+      isPlaying = !isPlaying;
+      playPauseBtn.textContent = isPlaying ? "⏸ 暫停" : "▶ 播放";
+      if (isPlaying) {
+        if (!activeAudio) {
+          loadAndPlayAudio(currentSceneIdx, sceneElapsed);
+        } else {
+          activeAudio.playbackRate = playbackRate;
+          activeAudio.play().catch(() => {});
+        }
+        lastTimestamp = performance.now();
+      } else {
+        if (activeAudio) activeAudio.pause();
+      }
+    }
+
+    // Scene HTML Renderers (driven by progress p in [0, 1])
+    function renderSceneContent(idx, t, dur) {
+      const p = Math.min(1, Math.max(0, t / dur));
+      const sc = SCENES[idx];
+
+      if (sc.id === "s01") {
+        const raceP = Math.min(1, Math.max(0, (p - 0.25) / 0.35));
+        const jwLeft = 20 + raceP * 580; // 10s
+        const cjLeft = 20 + Math.min(1, raceP * 1.11) * 580; // 9s (finishes faster!)
+        const showFormula = p > 0.68;
+        return `
+          <div class="scene-title">🏃 單元一：什麼是速率？怎麼比快慢？</div>
+          <div class="track-box">
+            <div class="lane">
+              <div class="finish-line"></div>
+              <div class="runner" style="left:${jwLeft}px">
+                <div class="runner-avatar" style="background:#38bdf8;color:#0b132b;">👦</div>
+                <span>介文 (60公尺 / 10秒)</span>
+              </div>
+            </div>
+            <div class="lane" style="border-color:${raceP > 0.9 ? 'var(--gold)' : 'rgba(255,255,255,0.2)'}">
+              <div class="finish-line"></div>
+              <div class="runner" style="left:${cjLeft}px">
+                <div class="runner-avatar" style="background:#fbbf24;color:#0b132b;">🏆</div>
+                <span>清吉 (60公尺 / 9秒) ${raceP > 0.88 ? '✨ 最快！' : ''}</span>
+              </div>
+            </div>
+          </div>
+          <div class="formula-box" style="margin-top:22px; opacity:${showFormula ? 1 : 0}; transform:translateY(${showFormula ? 0 : 12}px); transition:all 0.4s ease;">
+            💡 比快慢就是算「平均 1 秒鐘移動幾公尺」＝ <span class="highlight-gold">速率</span>！
+            <div style="font-size:0.95rem;color:var(--text-muted);margin-top:6px;">
+              介文：60 ÷ 10 ＝ <span class="highlight-cyan">6 公尺/秒</span>　｜　清吉：60 ÷ 9 ≈ <span class="highlight-gold">6.67 公尺/秒</span>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s02") {
+        const c1 = p >= 0.05;
+        const c2 = p >= 0.36;
+        const c3 = p >= 0.58;
+        const tip = p >= 0.80;
+        return `
+          <div class="scene-title">🚦 速率三兄弟：秒速、分速、時速</div>
+          <div class="grid-3">
+            <div class="brother-card ${c1 ? 'pop' : 'dim'}">
+              <div style="font-size:2.6rem;">🐦</div>
+              <div style="font-size:1.35rem;font-weight:900;color:var(--cyan);">秒速</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">平均 <b style="color:#fff">1 秒鐘</b> 移動的距離</div>
+              <div class="formula-box" style="font-size:0.95rem;padding:8px 12px;width:100%;">
+                18 公尺/秒 (m/s)
+              </div>
+            </div>
+            <div class="brother-card ${c2 ? 'pop' : 'dim'}">
+              <div style="font-size:2.6rem;">🚲</div>
+              <div style="font-size:1.35rem;font-weight:900;color:var(--emerald);">分速</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">平均 <b style="color:#fff">1 分鐘</b> 移動的距離</div>
+              <div class="formula-box" style="font-size:0.95rem;padding:8px 12px;width:100%;border-color:var(--emerald);">
+                公尺/分 (m/min)
+              </div>
+            </div>
+            <div class="brother-card ${c3 ? 'pop' : 'dim'}">
+              <div style="font-size:2.6rem;">🚄</div>
+              <div style="font-size:1.35rem;font-weight:900;color:var(--gold);">時速</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">平均 <b style="color:#fff">1 小時</b> 移動的距離</div>
+              <div class="formula-box" style="font-size:0.95rem;padding:8px 12px;width:100%;border-color:var(--gold);">
+                300 公里/時 (km/h)
+              </div>
+            </div>
+          </div>
+          <div class="card" style="margin-top:20px; border-color:var(--gold); opacity:${tip ? 1 : 0}; transition:opacity 0.4s ease;">
+            📌 小叮嚀：課本上所說的速率，指的都是「<span class="highlight-gold">平均速率</span>」喔！
+          </div>
+        `;
+      }
+
+      if (sc.id === "s03") {
+        const mode = p < 0.28 ? 0 : p < 0.56 ? 1 : p < 0.78 ? 2 : 3;
+        const dOp = mode === 2 ? 0.25 : 1;
+        const sOp = mode === 1 ? 0.25 : 1;
+        const tOp = mode === 3 ? 0.25 : 1;
+        const formulas = [
+          "用手遮住想求的項目，答案立刻出現！",
+          "遮住【速率】 → <span class='highlight-cyan'>速率 ＝ 距離 ÷ 時間</span>",
+          "遮住【距離】 → <span class='highlight-gold'>距離 ＝ 速率 × 時間</span>",
+          "遮住【時間】 → <span class='highlight-emerald'>時間 ＝ 距離 ÷ 速率</span>"
+        ];
+        return `
+          <div class="scene-title">🔺 神奇公式金字塔</div>
+          <div class="pyramid-layout">
+            <svg viewBox="0 0 320 270" width="310" height="260">
+              <polygon points="160,12 18,255 302,255" fill="#1c2d52" stroke="#fbbf24" stroke-width="5" stroke-linejoin="round"/>
+              <line x1="88" y1="135" x2="232" y2="135" stroke="#38bdf8" stroke-width="4"/>
+              <line x1="160" y1="135" x2="160" y2="255" stroke="#34d399" stroke-width="4"/>
+              <text x="160" y="102" text-anchor="middle" fill="#fbbf24" font-size="34" font-weight="900" opacity="${dOp}">距離</text>
+              <text x="160" y="128" text-anchor="middle" fill="#38bdf8" font-size="22" font-weight="900">÷</text>
+              <text x="108" y="218" text-anchor="middle" fill="#38bdf8" font-size="30" font-weight="900" opacity="${sOp}">速率</text>
+              <text x="160" y="214" text-anchor="middle" fill="#34d399" font-size="26" font-weight="900">×</text>
+              <text x="214" y="218" text-anchor="middle" fill="#34d399" font-size="30" font-weight="900" opacity="${tOp}">時間</text>
+              ${mode === 1 ? '<circle cx="108" cy="208" r="38" fill="rgba(251,191,36,0.35)" stroke="#fbbf24" stroke-width="3"/><text x="108" y="216" text-anchor="middle" fill="#fff" font-size="22" font-weight="900">✋ 遮</text>' : ''}
+              ${mode === 2 ? '<circle cx="160" cy="88" r="38" fill="rgba(251,191,36,0.35)" stroke="#fbbf24" stroke-width="3"/><text x="160" y="96" text-anchor="middle" fill="#fff" font-size="22" font-weight="900">✋ 遮</text>' : ''}
+              ${mode === 3 ? '<circle cx="214" cy="208" r="38" fill="rgba(251,191,36,0.35)" stroke="#fbbf24" stroke-width="3"/><text x="214" y="216" text-anchor="middle" fill="#fff" font-size="22" font-weight="900">✋ 遮</text>' : ''}
+            </svg>
+            <div style="display:flex;flex-direction:column;gap:14px;flex:1;">
+              <div class="formula-box" style="border-color:${mode===1?'var(--cyan)':mode===2?'var(--gold)':'var(--emerald)'};">
+                ${formulas[mode]}
+              </div>
+              <div class="card" style="font-size:1.05rem;line-height:1.7;color:var(--text-muted);">
+                <div>1. <b style="color:#fff">速率</b> ＝ 距離 ÷ 時間</div>
+                <div>2. <b style="color:#fff">距離</b> ＝ 速率 × 時間</div>
+                <div>3. <b style="color:#fff">時間</b> ＝ 距離 ÷ 速率</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s04") {
+        const showDiv = p > 0.2;
+        const showMul = p > 0.44;
+        const showLen = p > 0.58;
+        const showEx = p > 0.72;
+        return `
+          <div class="scene-title">⚙️ 大魔王一：單位換算怎麼算？</div>
+          <div class="gear-flow">
+            <div class="unit-row" style="opacity:${showDiv ? 1 : 0.4}; transition:opacity 0.3s;">
+              <div class="unit-node" style="border-color:var(--gold);color:var(--gold);">時速</div>
+              <span class="op-badge op-div">÷ 60</span>
+              <div class="unit-node" style="border-color:var(--emerald);color:var(--emerald);">分速</div>
+              <span class="op-badge op-div">÷ 60</span>
+              <div class="unit-node" style="border-color:var(--cyan);color:var(--cyan);">秒速</div>
+            </div>
+            <div class="unit-row" style="opacity:${showMul ? 1 : 0.2}; transition:opacity 0.3s;">
+              <span style="font-size:0.95rem;color:var(--text-muted);">反過來變大時間：</span>
+              <div class="unit-node" style="padding:8px 16px;font-size:1rem;">秒速</div>
+              <span class="op-badge op-mul">× 60</span>
+              <div class="unit-node" style="padding:8px 16px;font-size:1rem;">分速</div>
+              <span class="op-badge op-mul">× 60</span>
+              <div class="unit-node" style="padding:8px 16px;font-size:1rem;">時速</div>
+            </div>
+            <div class="card" style="width:100%;max-width:780px;display:flex;justify-content:space-between;align-items:center;opacity:${showLen ? 1 : 0};transition:opacity 0.3s;">
+              <span>📏 長度別忘記：<b class="highlight-gold">1 公里 ＝ 1000 公尺</b></span>
+              <span style="color:var(--text-muted);font-size:0.95rem;">(公里→公尺 ×1000；公尺→公里 ÷1000)</span>
+            </div>
+            <div class="formula-box" style="width:100%;max-width:780px;font-size:1.15rem;opacity:${showEx ? 1 : 0};transform:scale(${showEx ? 1 : 0.96});transition:all 0.35s;">
+              例：7.2 公里/時 <span class="highlight-emerald">×1000</span> ＝ 7200 公尺/時 <span class="highlight-coral">÷60</span> ＝ 120 公尺/分 <span class="highlight-coral">÷60</span> ＝ <span class="highlight-gold">2 公尺/秒</span>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s05") {
+        const t1 = p >= 0.05;
+        const t2 = p >= 0.52;
+        return `
+          <div class="scene-title">⚠️ 大魔王二：必考兩大陷阱！</div>
+          <div class="trap-grid">
+            <div class="trap-card ${t1 && !t2 ? 'active' : ''}">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--gold);">陷阱 1：單位沒統一就比大小</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">時速 75 公里 vs. 分速 1200 公尺，誰快？</div>
+              <div class="wrong-box">❌ 75 ＜ 1200，所以分速 1200 比較快</div>
+              <div class="right-box" style="opacity:${p > 0.24 ? 1 : 0.15};transition:opacity 0.3s;">
+                ⭕ 先統一成時速：<br/>1200 × 60 ＝ 72000 公尺/時 ＝ <b>72 公里/時</b><br/>
+                75 ＞ 72 → <b>時速 75 公里比較快！</b>
+              </div>
+            </div>
+            <div class="trap-card ${t2 ? 'active' : ''}" style="opacity:${t2 ? 1 : 0.25};transition:opacity 0.35s;">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--gold);">陷阱 2：平均速率直接相加除以 2</div>
+              <div style="font-size:0.95rem;color:var(--text-muted);">上山時速 2 公里，下山時速 6 公里，平均？</div>
+              <div class="wrong-box">❌ (2 ＋ 6) ÷ 2 ＝ 4 公里/時</div>
+              <div class="right-box" style="opacity:${p > 0.72 ? 1 : 0.15};transition:opacity 0.3s;">
+                ⭕ 正確公式：<br/>
+                <span style="font-size:1.1rem;color:#fff;">平均速率 ＝ <b>總距離 ÷ 總時間</b></span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s06") {
+        const sameP = Math.min(1, p / 0.52);
+        const oppP = Math.min(1, Math.max(0, (p - 0.52) / 0.45));
+        return `
+          <div class="scene-title">🧭 生活應用：追趕與相遇問題</div>
+          <div class="track-box" style="max-width:860px;">
+            <div class="card" style="border-color:${p < 0.52 ? 'var(--cyan)' : 'var(--border)'};">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-weight:900;color:var(--cyan);">1. 同方向出發（追趕／距離拉開）</span>
+                <span class="op-badge op-div">速率相減 × 時間</span>
+              </div>
+              <div class="lane" style="height:52px;">
+                <div class="runner" style="left:${30 + sameP * 340}px">🐢 85 m/min →</div>
+                <div class="runner" style="left:${30 + sameP * 520}px; color:var(--gold);">🐇 106 m/min →</div>
+              </div>
+            </div>
+
+            <div class="card" style="border-color:${p >= 0.52 ? 'var(--emerald)' : 'var(--border)'}; opacity:${p >= 0.48 ? 1 : 0.35}; transition:opacity 0.3s;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                <span style="font-weight:900;color:var(--emerald);">2. 相向而行 ／ 反方向跑（相遇／背離）</span>
+                <span class="op-badge op-mul">速率相加 × 時間</span>
+              </div>
+              <div class="lane" style="height:52px;">
+                <div class="runner" style="left:${30 + oppP * 280}px">🚗 速率A →</div>
+                <div class="runner" style="left:${660 - oppP * 280}px; color:var(--gold);">← 速率B 🚙</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // s07
+      return `
+        <div class="scene-title">🏆 總複習：速率通關四寶典</div>
+        <div class="summary-grid">
+          <div class="sum-item ${p > 0.15 ? 'show' : ''}">
+            <div class="sum-num">1</div>
+            <div><b style="color:var(--cyan);">速率三兄弟</b><br/><span style="font-size:0.9rem;color:var(--text-muted);">秒速 (m/s)、分速 (m/min)、時速 (km/h)</span></div>
+          </div>
+          <div class="sum-item ${p > 0.35 ? 'show' : ''}">
+            <div class="sum-num">2</div>
+            <div><b style="color:var(--gold);">神奇公式金字塔</b><br/><span style="font-size:0.9rem;color:var(--text-muted);">距離在上，速率 × 時間在下</span></div>
+          </div>
+          <div class="sum-item ${p > 0.52 ? 'show' : ''}">
+            <div class="sum-num">3</div>
+            <div><b style="color:var(--emerald);">單位換算口訣</b><br/><span style="font-size:0.9rem;color:var(--text-muted);">時間小除 60、大乘 60；公里公尺 1000 倍</span></div>
+          </div>
+          <div class="sum-item ${p > 0.70 ? 'show' : ''}">
+            <div class="sum-num">4</div>
+            <div><b style="color:var(--coral);">避開兩大陷阱</b><br/><span style="font-size:0.9rem;color:var(--text-muted);">先統一單位！平均速率 ＝ 總距離 ÷ 總時間</span></div>
+          </div>
+        </div>
+        <div class="formula-box pulse" style="margin-top:20px; border-color:var(--gold); opacity:${p > 0.82 ? 1 : 0}; transition:opacity 0.4s;">
+          🎉 恭喜破關！多做練習，你就是六年級速率小達人！
+        </div>
+      `;
+    }
+
+    function updateSubtitle(sc, t) {
+      let currentLine = sc.subtitles[0].text;
+      for (const item of sc.subtitles) {
+        if (t >= item.t) currentLine = item.text;
+      }
+      subtitleBar.textContent = currentLine;
+    }
+
+    function renderFrame() {
+      const sc = SCENES[currentSceneIdx];
+      scenePill.textContent = `第 ${currentSceneIdx + 1}/${SCENES.length} 幕：${sc.title}`;
+      stageCanvas.innerHTML = renderSceneContent(currentSceneIdx, sceneElapsed, sc.duration);
+      updateSubtitle(sc, sceneElapsed);
+
+      const globalT = getGlobalTime();
+      currTimeLabel.textContent = formatTime(globalT);
+      progressFill.style.width = `${Math.min(100, (globalT / TOTAL_DURATION) * 100)}%`;
+
+      // Update active chapter tab
+      Array.from(chapterTabs.children).forEach((btn, i) => {
+        btn.classList.toggle("active", i === currentSceneIdx);
+      });
+    }
+
+    function tick(now) {
+      if (lastTimestamp === null) lastTimestamp = now;
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      if (isPlaying) {
+        if (activeAudio && !activeAudio.paused && activeAudio.duration > 0) {
+          sceneElapsed = activeAudio.currentTime;
+        } else {
+          sceneElapsed += dt * playbackRate;
+          if (sceneElapsed >= SCENES[currentSceneIdx].duration) {
+            if (currentSceneIdx < SCENES.length - 1) {
+              jumpToScene(currentSceneIdx + 1, true);
+            } else {
+              isPlaying = false;
+              playPauseBtn.textContent = "▶ 播放";
+            }
+          }
+        }
+        renderFrame();
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    // Event Listeners
+    bigPlayBtn.addEventListener("click", () => jumpToScene(0, true));
+    playPauseBtn.addEventListener("click", togglePlay);
+    prevBtn.addEventListener("click", () => jumpToScene(Math.max(0, currentSceneIdx - 1), true));
+    nextBtn.addEventListener("click", () => jumpToScene(Math.min(SCENES.length - 1, currentSceneIdx + 1), true));
+    replayBtn.addEventListener("click", () => jumpToScene(0, true));
+
+    speedBtn.addEventListener("click", () => {
+      const rates = [1.0, 1.15, 0.85];
+      const next = rates[(rates.indexOf(playbackRate) + 1) % rates.length];
+      playbackRate = next;
+      speedBtn.textContent = `語速 ${playbackRate}x`;
+      if (activeAudio) activeAudio.playbackRate = playbackRate;
+    });
+
+    subToggleBtn.addEventListener("click", () => {
+      showSubtitles = !showSubtitles;
+      subtitleBar.classList.toggle("hidden", !showSubtitles);
+      subToggleBtn.textContent = showSubtitles ? "💬 字幕：開" : "💬 字幕：關";
+    });
+
+    muteBtn.addEventListener("click", () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? "🔇 聲音：關" : "🔊 聲音：開";
+      if (activeAudio) activeAudio.muted = isMuted;
+    });
+
+    fsBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) {
+        playerShell.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    });
+
+    progressTrack.addEventListener("click", (e) => {
+      const rect = progressTrack.getBoundingClientRect();
+      const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+      let targetGlobal = ratio * TOTAL_DURATION;
+      let acc = 0;
+      for (let i = 0; i < SCENES.length; i++) {
+        if (targetGlobal <= acc + SCENES[i].duration || i === SCENES.length - 1) {
+          currentSceneIdx = i;
+          sceneElapsed = Math.max(0, targetGlobal - acc);
+          startOverlay.classList.add("hidden");
+          loadAndPlayAudio(i, sceneElapsed);
+          renderFrame();
+          break;
+        }
+        acc += SCENES[i].duration;
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        togglePlay();
+      } else if (e.code === "ArrowRight") {
+        jumpToScene(Math.min(SCENES.length - 1, currentSceneIdx + 1), true);
+      } else if (e.code === "ArrowLeft") {
+        jumpToScene(Math.max(0, currentSceneIdx - 1), true);
+      }
+    });
+
+    // Init
+    renderFrame();
+    rafId = requestAnimationFrame(tick);
+  </script>
+</body>
+</html>

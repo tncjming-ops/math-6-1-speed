@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>六上數學 第8單元｜數量關係大解密（3分鐘教學動畫）</title>
+  <style>
+    :root {
+      --bg-dark: #0b132b;
+      --bg-stage: #121f3d;
+      --card-bg: #1c2d52;
+      --border: #2e4372;
+      --text-main: #f8fafc;
+      --text-muted: #cbd5e1;
+      --gold: #fbbf24;
+      --cyan: #38bdf8;
+      --emerald: #34d399;
+      --coral: #fb7185;
+      --violet: #a78bfa;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #1b2a4e 0%, #090e1d 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      user-select: none;
+    }
+
+    .player-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-stage);
+      border: 2px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 22px;
+      background: rgba(11, 19, 43, 0.85);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .brand .badge {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 900;
+    }
+
+    .scene-pill {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--cyan);
+      padding: 4px 14px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .stage-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(180deg, #132245 0%, #0d1730 100%);
+      overflow: hidden;
+    }
+
+    .stage-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .scene-canvas {
+      position: absolute;
+      inset: 0;
+      padding: 26px 34px 96px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .start-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(9, 14, 29, 0.88);
+      backdrop-filter: blur(8px);
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      transition: opacity 0.35s ease;
+    }
+
+    .start-overlay.hidden { opacity: 0; pointer-events: none; }
+
+    .start-overlay h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+      background: linear-gradient(90deg, #a78bfa, #38bdf8, #34d399);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .start-overlay p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 580px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .big-play-btn {
+      background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+      color: #fff;
+      border: none;
+      padding: 14px 36px;
+      border-radius: 999px;
+      font-size: 1.2rem;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: transform 0.15s ease;
+    }
+
+    .big-play-btn:hover { transform: translateY(-2px) scale(1.03); }
+
+    .subtitle-bar {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 920px;
+      background: rgba(9, 14, 29, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(6px);
+      border-radius: 14px;
+      padding: 10px 20px;
+      text-align: center;
+      font-size: clamp(0.95rem, 1.5vw, 1.2rem);
+      line-height: 1.55;
+      color: #fff;
+      z-index: 20;
+      transition: opacity 0.25s ease;
+    }
+
+    .subtitle-bar.hidden { opacity: 0; pointer-events: none; }
+
+    .controls {
+      background: rgba(11, 19, 43, 0.95);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .timeline-row { display: flex; align-items: center; gap: 12px; }
+    .time-label { font-variant-numeric: tabular-nums; font-size: 0.85rem; color: var(--text-muted); min-width: 44px; }
+    .progress-track { position: relative; flex: 1; height: 10px; background: #1e293b; border-radius: 999px; cursor: pointer; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, var(--violet), var(--cyan)); border-radius: 999px; transition: width 0.08s linear; }
+
+    .chapter-tabs { display: flex; gap: 6px; flex-wrap: wrap; justify-content: center; }
+    .chap-btn {
+      background: #1a2747;
+      border: 1px solid #2e4372;
+      color: var(--text-muted);
+      padding: 5px 11px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .chap-btn:hover { background: #253863; color: #fff; }
+    .chap-btn.active { background: rgba(167, 139, 250, 0.2); border-color: var(--violet); color: var(--violet); }
+
+    .btn-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+    .btn-group { display: flex; align-items: center; gap: 8px; }
+    .ctrl-btn {
+      background: #1e2f54;
+      border: 1px solid #354c80;
+      color: #fff;
+      padding: 7px 14px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ctrl-btn:hover { background: #2b4170; }
+    .ctrl-btn.primary { background: var(--violet); border-color: var(--violet); color: #fff; }
+
+    .scene-title {
+      font-size: clamp(1.35rem, 2.4vw, 1.95rem);
+      font-weight: 900;
+      margin-bottom: 18px;
+      text-align: center;
+      color: var(--gold);
+    }
+
+    .card {
+      background: rgba(28, 45, 82, 0.88);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 22px;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+    }
+
+    .formula-box {
+      background: rgba(11, 19, 43, 0.82);
+      border: 2px solid var(--cyan);
+      border-radius: 14px;
+      padding: 12px 22px;
+      font-size: clamp(1.05rem, 1.9vw, 1.45rem);
+      font-weight: 900;
+      text-align: center;
+      color: #fff;
+    }
+
+    .grid-2x2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      width: 100%;
+      max-width: 880px;
+    }
+
+    .rel-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 16px 20px;
+      opacity: 0.25;
+      transform: scale(0.95);
+      transition: all 0.35s ease;
+    }
+    .rel-card.active {
+      opacity: 1;
+      transform: scale(1);
+      border-color: var(--gold);
+      box-shadow: 0 0 24px rgba(251, 191, 36, 0.2);
+    }
+
+    .digit-tile {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px;
+      height: 64px;
+      border-radius: 12px;
+      background: #1e2f54;
+      border: 2px solid var(--cyan);
+      font-size: 1.8rem;
+      font-weight: 900;
+      margin: 0 4px;
+    }
+    .digit-tile.banned {
+      border-color: var(--coral);
+      color: var(--coral);
+      background: rgba(251, 113, 133, 0.15);
+      text-decoration: line-through;
+    }
+
+    .highlight-gold { color: var(--gold); }
+    .highlight-cyan { color: var(--cyan); }
+    .highlight-emerald { color: var(--emerald); }
+    .highlight-coral { color: var(--coral); }
+  </style>
+</head>
+<body>
+  <div class="player-shell" id="playerShell">
+    <div class="top-bar">
+      <div class="brand">
+        <span class="badge">六上數學 Ch.8</span>
+        <span>🔢 數量關係大解密：3分鐘觀念全攻略</span>
+      </div>
+      <div class="scene-pill" id="scenePill">準備播放</div>
+    </div>
+
+    <div class="stage-wrapper" id="stageWrapper">
+      <div class="scene-canvas" id="sceneCanvas"></div>
+
+      <div class="start-overlay" id="startOverlay">
+        <h1>🔢 數量關係大解密！</h1>
+        <p>
+          一次掌握「和・差・積・商四種數量關係」、「搭配問題（加法 vs. 乘法）」、<br />
+          「數字排列陷阱」與「圖形排列＆空心隊形規律」！
+        </p>
+        <button class="big-play-btn" id="bigPlayBtn">
+          <span>▶</span> 開始播放動畫（約 3 分鐘）
+        </button>
+      </div>
+
+      <div class="subtitle-bar" id="subtitleBar">點擊「開始播放動畫」即可同步收看口白與動畫！</div>
+    </div>
+
+    <div class="controls">
+      <div class="timeline-row">
+        <span class="time-label" id="currTimeLabel">00:00</span>
+        <div class="progress-track" id="progressTrack">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <span class="time-label" id="totalTimeLabel">02:43</span>
+      </div>
+
+      <div class="chapter-tabs" id="chapterTabs"></div>
+
+      <div class="btn-row">
+        <div class="btn-group">
+          <button class="ctrl-btn primary" id="playPauseBtn">▶ 播放</button>
+          <button class="ctrl-btn" id="prevBtn">⏮ 上一段</button>
+          <button class="ctrl-btn" id="nextBtn">下一段 ⏭</button>
+          <button class="ctrl-btn" id="replayBtn">🔄 重播</button>
+        </div>
+        <div class="btn-group">
+          <button class="ctrl-btn" id="speedBtn">語速 1.0x</button>
+          <button class="ctrl-btn" id="subToggleBtn">💬 字幕：開</button>
+          <button class="ctrl-btn" id="muteBtn">🔊 聲音：開</button>
+          <button class="ctrl-btn" id="fsBtn">⛶ 全螢幕</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SCENES = [
+      {
+        id: "s01",
+        short: "1. 認識規律",
+        title: "什麼是數量關係？",
+        audio: "audio/s01.mp3",
+        duration: 22.90,
+        subtitles: [
+          { t: 0.0, text: "各位六年級的小朋友大家好！今天我們要一起破解第 8 單元「數量關係」的秘密！" },
+          { t: 7.2, text: "從羅浮宮的玻璃金字塔、年齡變化，到買飲料和排隊形，生活中到處都藏著數學規律。" },
+          { t: 15.0, text: "只要學會找出兩個數量之間的規則，再複雜的題目都能一秒看穿喔！" }
+        ]
+      },
+      {
+        id: "s02",
+        short: "2. 四種關係",
+        title: "第一類：兩數量的四種關係",
+        audio: "audio/s02.mp3",
+        duration: 23.76,
+        subtitles: [
+          { t: 0.0, text: "先來看第一類：兩個數量的關係，共有四種！" },
+          { t: 4.5, text: "一、和固定：像一天中白晝加黑夜永遠等於 24 小時。" },
+          { t: 10.0, text: "二、差固定：像兄妹年齡，永遠相差 2 歲不變。" },
+          { t: 14.5, text: "三、積固定：像分期付款，期數乘以每期金額等於總價錢。" },
+          { t: 19.2, text: "四、商固定：像買果汁，總金額除以杯數就是單價！" }
+        ]
+      },
+      {
+        id: "s03",
+        short: "3. 搭配問題",
+        title: "第二類：搭配問題（加還是乘？）",
+        audio: "audio/s03.mp3",
+        duration: 22.93,
+        subtitles: [
+          { t: 0.0, text: "接著看第二類：搭配問題，關鍵在於要用「加法」還是「乘法」！" },
+          { t: 5.8, text: "如果只能選一個，例如從 A、B、C 三區選一間餐廳，就把各區數量「相加」。" },
+          { t: 12.2, text: "如果要依序各選一個來搭配，例如飲料種類、甜度、冰量，就要全部「相乘」！" },
+          { t: 18.0, text: "像是 3 種甜度乘以 4 種冰量，就能配出 12 種組合！" }
+        ]
+      },
+      {
+        id: "s04",
+        short: "4. 數字陷阱",
+        title: "數字排列的大陷阱！",
+        audio: "audio/s04.mp3",
+        duration: 23.26,
+        subtitles: [
+          { t: 0.0, text: "考卷最愛考「數字組成二位數」，一定要小心這兩個陷阱！" },
+          { t: 5.5, text: "第一，數字「0 不能放在十位數」，不然就變成一位數啦！" },
+          { t: 10.8, text: "第二，看清楚題目說數字「能不能重複」！不能重複時，十位選走一個，個位就少一個！" },
+          { t: 18.0, text: "如果題目問「奇數」，更要記得個位只能放奇數喔！" }
+        ]
+      },
+      {
+        id: "s05",
+        short: "5. 圖形規律",
+        title: "第三類：圖形排列規律",
+        audio: "audio/s05.mp3",
+        duration: 25.24,
+        subtitles: [
+          { t: 0.0, text: "第三類是「圖形排列規律」！用棉花棒排相連的正三角形，一個要 3 根，兩個只要 5 根，為什麼？" },
+          { t: 8.5, text: "因為中間共用了一根！千萬不可以直接 3 乘以三角形個數！" },
+          { t: 13.5, text: "記住口訣：「第 1 個先放好，後面每多 1 個，只加固定數量」。" },
+          { t: 19.2, text: "像排 28 個正三角形，就是 3 加上 2 乘以 27，等於 57 根！" }
+        ]
+      },
+      {
+        id: "s06",
+        short: "6. 空心隊形",
+        title: "空心隊形與座位週期",
+        audio: "audio/s06.mp3",
+        duration: 23.24,
+        subtitles: [
+          { t: 0.0, text: "還有兩個必考規律題！第一，「空心正方形隊形」，直接每邊乘以 4，四個轉角的人會被重複算！" },
+          { t: 8.2, text: "所以要寫成「每邊人數 × 4 － 4」，或是「(每邊人數 － 1) × 4」才對！" },
+          { t: 15.0, text: "第二，火車座位每排 4 個，想知道 36 號坐哪裡，只要「號碼除以 4 看餘數」就搞定！" }
+        ]
+      },
+      {
+        id: "s07",
+        short: "7. 總複習",
+        title: "總複習與通關秘訣",
+        audio: "audio/s07.mp3",
+        duration: 22.31,
+        subtitles: [
+          { t: 0.0, text: "恭喜你！三分鐘數量關係大解密破關啦！最後一起複習三大重點：" },
+          { t: 6.0, text: "一、列表格找出和、差、積、商哪個不變；" },
+          { t: 10.5, text: "二、搭配題單選用加、複合用乘，排數字小心 0 和重複；" },
+          { t: 16.0, text: "三、圖形規律注意共用邊和重複頂點，用簡化問題找規則！你一定能拿滿分，加油！" }
+        ]
+      }
+    ];
+
+    const TOTAL_DURATION = SCENES.reduce((acc, s) => acc + s.duration, 0);
+
+    const stageCanvas = document.getElementById("sceneCanvas");
+    const subtitleBar = document.getElementById("subtitleBar");
+    const scenePill = document.getElementById("scenePill");
+    const startOverlay = document.getElementById("startOverlay");
+    const bigPlayBtn = document.getElementById("bigPlayBtn");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const replayBtn = document.getElementById("replayBtn");
+    const speedBtn = document.getElementById("speedBtn");
+    const subToggleBtn = document.getElementById("subToggleBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const fsBtn = document.getElementById("fsBtn");
+    const progressTrack = document.getElementById("progressTrack");
+    const progressFill = document.getElementById("progressFill");
+    const currTimeLabel = document.getElementById("currTimeLabel");
+    const totalTimeLabel = document.getElementById("totalTimeLabel");
+    const chapterTabs = document.getElementById("chapterTabs");
+    const playerShell = document.getElementById("playerShell");
+
+    let currentSceneIdx = 0;
+    let sceneElapsed = 0;
+    let isPlaying = false;
+    let playbackRate = 1.0;
+    let isMuted = false;
+    let showSubtitles = true;
+    let lastTimestamp = null;
+    let activeAudio = null;
+
+    function formatTime(sec) {
+      const s = Math.max(0, Math.floor(sec));
+      return `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+    }
+
+    totalTimeLabel.textContent = formatTime(TOTAL_DURATION);
+
+    SCENES.forEach((sc, idx) => {
+      const btn = document.createElement("button");
+      btn.className = "chap-btn";
+      btn.textContent = sc.short;
+      btn.addEventListener("click", () => jumpToScene(idx, true));
+      chapterTabs.appendChild(btn);
+    });
+
+    function getGlobalTime() {
+      let sum = 0;
+      for (let i = 0; i < currentSceneIdx; i++) sum += SCENES[i].duration;
+      return sum + sceneElapsed;
+    }
+
+    function stopAudio() {
+      if (activeAudio) {
+        activeAudio.pause();
+        activeAudio.onended = null;
+        activeAudio = null;
+      }
+    }
+
+    function pauseAll() {
+      isPlaying = false;
+      playPauseBtn.textContent = "▶ 播放";
+      if (activeAudio) activeAudio.pause();
+    }
+
+    // Listen for pause message from integrated parent hub
+    window.addEventListener("message", (ev) => {
+      if (ev.data && ev.data.type === "pause") {
+        pauseAll();
+      }
+    });
+
+    function loadAndPlayAudio(idx, offsetSec = 0) {
+      stopAudio();
+      const sc = SCENES[idx];
+      const audio = new Audio(sc.audio);
+      audio.playbackRate = playbackRate;
+      audio.muted = isMuted;
+      audio.currentTime = Math.min(offsetSec, Math.max(0, sc.duration - 0.1));
+      audio.onended = () => {
+        if (!isPlaying) return;
+        if (currentSceneIdx < SCENES.length - 1) {
+          jumpToScene(currentSceneIdx + 1, true);
+        } else {
+          pauseAll();
+        }
+      };
+      activeAudio = audio;
+      if (isPlaying) audio.play().catch(() => {});
+    }
+
+    function jumpToScene(idx, autoPlay = true) {
+      currentSceneIdx = Math.max(0, Math.min(SCENES.length - 1, idx));
+      sceneElapsed = 0;
+      startOverlay.classList.add("hidden");
+      if (autoPlay) {
+        isPlaying = true;
+        playPauseBtn.textContent = "⏸ 暫停";
+      }
+      loadAndPlayAudio(currentSceneIdx, 0);
+      renderFrame();
+    }
+
+    function togglePlay() {
+      startOverlay.classList.add("hidden");
+      isPlaying = !isPlaying;
+      playPauseBtn.textContent = isPlaying ? "⏸ 暫停" : "▶ 播放";
+      if (isPlaying) {
+        if (!activeAudio) {
+          loadAndPlayAudio(currentSceneIdx, sceneElapsed);
+        } else {
+          activeAudio.playbackRate = playbackRate;
+          activeAudio.play().catch(() => {});
+        }
+        lastTimestamp = performance.now();
+      } else {
+        if (activeAudio) activeAudio.pause();
+      }
+    }
+
+    function renderSceneContent(idx, t, dur) {
+      const p = Math.min(1, Math.max(0, t / dur));
+      const sc = SCENES[idx];
+
+      if (sc.id === "s01") {
+        const layers = p < 0.25 ? 1 : p < 0.45 ? 2 : p < 0.65 ? 3 : 4;
+        let blocks = "";
+        for (let r = 1; r <= layers; r++) {
+          let rowHtml = "";
+          for (let c = 0; c < r; c++) {
+            rowHtml += `<span style="display:inline-block;width:36px;height:28px;margin:2px;background:rgba(56,189,248,0.35);border:2px solid #38bdf8;border-radius:6px;"></span>`;
+          }
+          blocks += `<div style="line-height:0;">${rowHtml} <span style="font-size:0.9rem;color:var(--gold);margin-left:8px;">第${r}層：${r}片</span></div>`;
+        }
+        return `
+          <div class="scene-title">🔺 第 8 單元：什麼是「數量關係」？</div>
+          <div class="card" style="width:100%;max-width:760px;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;">
+            <div style="font-size:1.05rem;color:var(--text-muted);">羅浮宮玻璃金字塔：每往下一層就多 1 片！</div>
+            <div style="min-height:140px;display:flex;flex-direction:column;justify-content:center;gap:4px;">${blocks}</div>
+          </div>
+          <div class="formula-box" style="margin-top:18px;opacity:${p > 0.65 ? 1 : 0};transition:opacity 0.4s;">
+            🔍 觀察規律三大招：<span class="highlight-gold">兩數關係</span> ・ <span class="highlight-cyan">搭配組合</span> ・ <span class="highlight-emerald">圖形排列</span>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s02") {
+        return `
+          <div class="scene-title">📊 第一類：兩數量的四種關係</div>
+          <div class="grid-2x2">
+            <div class="rel-card ${p > 0.15 ? 'active' : ''}">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--gold);">1. 和固定（＋ 不變）</div>
+              <div style="margin-top:6px;color:var(--text-muted);">☀️ 白晝 ＋ 🌙 黑夜 ＝ <b style="color:#fff">24 小時</b></div>
+            </div>
+            <div class="rel-card ${p > 0.38 ? 'active' : ''}">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--cyan);">2. 差固定（－ 不變）</div>
+              <div style="margin-top:6px;color:var(--text-muted);">👦 昱仁 12 歲 － 👧 妹妹 10 歲 ＝ <b style="color:#fff">永遠差 2 歲</b></div>
+            </div>
+            <div class="rel-card ${p > 0.58 ? 'active' : ''}">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--emerald);">3. 積固定（× 不變）</div>
+              <div style="margin-top:6px;color:var(--text-muted);">💳 期數 × 每期金額 ＝ <b style="color:#fff">音響總價 36000 元</b></div>
+            </div>
+            <div class="rel-card ${p > 0.76 ? 'active' : ''}">
+              <div style="font-size:1.2rem;font-weight:900;color:var(--violet);">4. 商固定（÷ 不變）</div>
+              <div style="margin-top:6px;color:var(--text-muted);">🥤 總金額 ÷ 杯數 ＝ <b style="color:#fff">每杯單價 65 元</b></div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s03") {
+        return `
+          <div class="scene-title">🧋 第二類：搭配問題（用加的還是乘的？）</div>
+          <div class="grid-2x2" style="grid-template-columns:1fr 1fr;">
+            <div class="card" style="border-color:${p > 0.2 && p < 0.52 ? 'var(--gold)' : 'var(--border)'};">
+              <div style="font-size:1.25rem;font-weight:900;color:var(--cyan);margin-bottom:8px;">➕ 加法原理：只選「一個」</div>
+              <div style="color:var(--text-muted);line-height:1.6;">
+                美食廣場分成 A、B、C 三區，<br/>只能挑 <b style="color:#fff">一間</b> 餐廳用餐：<br/>
+                <div class="formula-box" style="margin-top:10px;font-size:1.1rem;">A區 ＋ B區 ＋ C區</div>
+              </div>
+            </div>
+            <div class="card" style="border-color:${p >= 0.52 ? 'var(--emerald)' : 'var(--border)'}; opacity:${p >= 0.48 ? 1 : 0.35};transition:opacity 0.35s;">
+              <div style="font-size:1.25rem;font-weight:900;color:var(--emerald);margin-bottom:8px;">✖️ 乘法原理：各選一個「搭配」</div>
+              <div style="color:var(--text-muted);line-height:1.6;">
+                點飲料：<b style="color:#fff">3 種甜度</b> 搭配 <b style="color:#fff">4 種冰量</b><br/>
+                <div class="formula-box" style="margin-top:10px;font-size:1.1rem;border-color:var(--emerald);">3 × 4 ＝ <span class="highlight-gold">12 種</span>組合！</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s04") {
+        return `
+          <div class="scene-title">⚠️ 數字組成二位數：必考兩大陷阱！</div>
+          <div class="card" style="width:100%;max-width:860px;display:flex;flex-direction:column;gap:14px;">
+            <div style="text-align:center;">
+              <span style="color:var(--text-muted);margin-right:10px;">用卡片組二位數：</span>
+              <span class="digit-tile banned">0</span>
+              <span class="digit-tile">1</span>
+              <span class="digit-tile">2</span>
+              <span class="digit-tile">3</span>
+            </div>
+            <div class="grid-2x2" style="gap:12px;">
+              <div class="card" style="background:rgba(251,113,133,0.12);border-color:var(--coral);opacity:${p > 0.2 ? 1 : 0.2};">
+                <b class="highlight-coral">陷阱 1：0 不能放十位數！</b><br/>
+                <span style="font-size:0.95rem;color:var(--text-muted);">十位數只能選 1、2、3（共 <b>3 種</b>）</span>
+              </div>
+              <div class="card" style="background:rgba(56,189,248,0.12);border-color:var(--cyan);opacity:${p > 0.45 ? 1 : 0.2};">
+                <b class="highlight-cyan">陷阱 2：看清「能不能重複」</b><br/>
+                <span style="font-size:0.95rem;color:var(--text-muted);">不能重複：個位少 1 種 → <b>3 × 3 ＝ 9 種</b></span>
+              </div>
+            </div>
+            <div class="formula-box" style="font-size:1.05rem;border-color:var(--gold);opacity:${p > 0.72 ? 1 : 0};transition:opacity 0.35s;">
+              💡 若題目要求「奇數」→ <span class="highlight-gold">個位數</span> 只能放奇數（如 1、3、5）喔！
+            </div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s05") {
+        const count = p < 0.25 ? 1 : p < 0.45 ? 2 : 3;
+        let tris = "";
+        for (let i = 0; i < count; i++) {
+          const x = 40 + i * 90;
+          const topX = x + 45;
+          const color = i === 0 ? "#fbbf24" : "#38bdf8";
+          if (i === 0) {
+            tris += `<line x1="${x}" y1="120" x2="${topX}" y2="35" stroke="#fbbf24" stroke-width="6" stroke-linecap="round"/>`;
+          }
+          tris += `<line x1="${topX}" y1="35" x2="${x + 90}" y2="120" stroke="${color}" stroke-width="6" stroke-linecap="round"/>`;
+          tris += `<line x1="${x}" y1="120" x2="${x + 90}" y2="120" stroke="${color}" stroke-width="6" stroke-linecap="round"/>`;
+        }
+        return `
+          <div class="scene-title">🔺 第三類：圖形排列規律（棉花棒正三角形）</div>
+          <div class="card" style="width:100%;max-width:840px;text-align:center;">
+            <svg viewBox="0 0 360 140" width="360" height="140">${tris}</svg>
+            <div style="font-size:1rem;color:var(--text-muted);margin-top:4px;">
+              第 1 個用 <b class="highlight-gold">3 根</b>，每多 1 個只加 <b class="highlight-cyan">2 根</b>！（中間有共用邊）
+            </div>
+          </div>
+          <div class="formula-box" style="margin-top:16px;opacity:${p > 0.55 ? 1 : 0};transition:opacity 0.35s;">
+            排 28 個正三角形：<span class="highlight-gold">3</span> ＋ <span class="highlight-cyan">2</span> × (28 － 1) ＝ <span class="highlight-emerald">57 根</span>
+            <div style="font-size:0.9rem;color:var(--coral);margin-top:4px;">❌ 千萬不可直接算 3 × 28！</div>
+          </div>
+        `;
+      }
+
+      if (sc.id === "s06") {
+        // Hollow square 4x4 dots SVG
+        let dots = "";
+        const coords = [
+          [20,20],[55,20],[90,20],[125,20],
+          [125,55],[125,90],[125,125],
+          [90,125],[55,125],[20,125],
+          [20,90],[20,55]
+        ];
+        coords.forEach(([x,y]) => {
+          const isCorner = (x===20 || x===125) && (y===20 || y===125);
+          dots += `<circle cx="${x}" cy="${y}" r="9" fill="${isCorner ? '#fb7185' : '#38bdf8'}" stroke="#fff" stroke-width="2"/>`;
+        });
+        return `
+          <div class="scene-title">🟦 必考規律：空心隊形 & 車廂座位</div>
+          <div class="grid-2x2">
+            <div class="card" style="text-align:center;">
+              <div style="font-weight:900;color:var(--coral);margin-bottom:6px;">空心正方形：4 個角重複算！</div>
+              <svg viewBox="0 0 145 145" width="135" height="135">${dots}</svg>
+              <div style="font-size:0.95rem;margin-top:6px;">
+                ⭕ <b class="highlight-gold">每邊 × 4 － 4</b><br/>
+                ⭕ <b class="highlight-emerald">(每邊 － 1) × 4</b>
+              </div>
+            </div>
+            <div class="card" style="display:flex;flex-direction:column;justify-content:center;gap:12px;opacity:${p > 0.55 ? 1 : 0.25};transition:opacity 0.35s;">
+              <div style="font-weight:900;color:var(--cyan);font-size:1.15rem;">🚆 火車座位（每排 4 個）</div>
+              <div style="color:var(--text-muted);line-height:1.6;">
+                1、2、3、4 號為第一排…<br/>
+                想知道 36 號坐哪裡：<br/>
+                <div class="formula-box" style="margin-top:8px;font-size:1.1rem;">號碼 ÷ 4 → 看「餘數」！</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      // s07
+      return `
+        <div class="scene-title">🏆 總複習：數量關係通關三寶典</div>
+        <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:820px;">
+          <div class="card" style="border-color:${p > 0.18 ? 'var(--gold)' : 'var(--border)'};opacity:${p > 0.18 ? 1 : 0.25};transition:all 0.3s;">
+            <b class="highlight-gold">1. 兩數量關係：</b> 列表格找出「和、差、積、商」哪一個固定不變！
+          </div>
+          <div class="card" style="border-color:${p > 0.42 ? 'var(--cyan)' : 'var(--border)'};opacity:${p > 0.42 ? 1 : 0.25};transition:all 0.3s;">
+            <b class="highlight-cyan">2. 搭配與排數字：</b> 單選用「加」、複合搭配用「乘」；排數字小心「0」與「重複」！
+          </div>
+          <div class="card" style="border-color:${p > 0.65 ? 'var(--emerald)' : 'var(--border)'};opacity:${p > 0.65 ? 1 : 0.25};transition:all 0.3s;">
+            <b class="highlight-emerald">3. 圖形與週期規律：</b> 注意「共用邊」和「重複頂點」，先用小數字找出規則！
+          </div>
+          <div class="formula-box" style="border-color:var(--violet);opacity:${p > 0.82 ? 1 : 0};transition:opacity 0.4s;">
+            🎉 恭喜破關！你就是六年級數量關係小達人！
+          </div>
+        </div>
+      `;
+    }
+
+    function updateSubtitle(sc, t) {
+      let line = sc.subtitles[0].text;
+      for (const item of sc.subtitles) {
+        if (t >= item.t) line = item.text;
+      }
+      subtitleBar.textContent = line;
+    }
+
+    function renderFrame() {
+      const sc = SCENES[currentSceneIdx];
+      scenePill.textContent = `第 ${currentSceneIdx + 1}/${SCENES.length} 幕：${sc.title}`;
+      stageCanvas.innerHTML = renderSceneContent(currentSceneIdx, sceneElapsed, sc.duration);
+      updateSubtitle(sc, sceneElapsed);
+
+      const globalT = getGlobalTime();
+      currTimeLabel.textContent = formatTime(globalT);
+      progressFill.style.width = `${Math.min(100, (globalT / TOTAL_DURATION) * 100)}%`;
+
+      Array.from(chapterTabs.children).forEach((btn, i) => {
+        btn.classList.toggle("active", i === currentSceneIdx);
+      });
+    }
+
+    function tick(now) {
+      if (lastTimestamp === null) lastTimestamp = now;
+      const dt = (now - lastTimestamp) / 1000;
+      lastTimestamp = now;
+
+      if (isPlaying) {
+        if (activeAudio && !activeAudio.paused && activeAudio.duration > 0) {
+          sceneElapsed = activeAudio.currentTime;
+        } else {
+          sceneElapsed += dt * playbackRate;
+          if (sceneElapsed >= SCENES[currentSceneIdx].duration) {
+            if (currentSceneIdx < SCENES.length - 1) {
+              jumpToScene(currentSceneIdx + 1, true);
+            } else {
+              pauseAll();
+            }
+          }
+        }
+        renderFrame();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    bigPlayBtn.addEventListener("click", () => jumpToScene(0, true));
+    playPauseBtn.addEventListener("click", togglePlay);
+    prevBtn.addEventListener("click", () => jumpToScene(Math.max(0, currentSceneIdx - 1), true));
+    nextBtn.addEventListener("click", () => jumpToScene(Math.min(SCENES.length - 1, currentSceneIdx + 1), true));
+    replayBtn.addEventListener("click", () => jumpToScene(0, true));
+
+    speedBtn.addEventListener("click", () => {
+      const rates = [1.0, 1.15, 0.85];
+      playbackRate = rates[(rates.indexOf(playbackRate) + 1) % rates.length];
+      speedBtn.textContent = `語速 ${playbackRate}x`;
+      if (activeAudio) activeAudio.playbackRate = playbackRate;
+    });
+
+    subToggleBtn.addEventListener("click", () => {
+      showSubtitles = !showSubtitles;
+      subtitleBar.classList.toggle("hidden", !showSubtitles);
+      subToggleBtn.textContent = showSubtitles ? "💬 字幕：開" : "💬 字幕：關";
+    });
+
+    muteBtn.addEventListener("click", () => {
+      isMuted = !isMuted;
+      muteBtn.textContent = isMuted ? "🔇 聲音：關" : "🔊 聲音：開";
+      if (activeAudio) activeAudio.muted = isMuted;
+    });
+
+    fsBtn.addEventListener("click", () => {
+      if (!document.fullscreenElement) playerShell.requestFullscreen().catch(() => {});
+      else document.exitFullscreen().catch(() => {});
+    });
+
+    progressTrack.addEventListener("click", (e) => {
+      const rect = progressTrack.getBoundingClientRect();
+      const targetGlobal = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width)) * TOTAL_DURATION;
+      let acc = 0;
+      for (let i = 0; i < SCENES.length; i++) {
+        if (targetGlobal <= acc + SCENES[i].duration || i === SCENES.length - 1) {
+          currentSceneIdx = i;
+          sceneElapsed = Math.max(0, targetGlobal - acc);
+          startOverlay.classList.add("hidden");
+          loadAndPlayAudio(i, sceneElapsed);
+          renderFrame();
+          break;
+        }
+        acc += SCENES[i].duration;
+      }
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") { e.preventDefault(); togglePlay(); }
+      else if (e.code === "ArrowRight") jumpToScene(Math.min(SCENES.length - 1, currentSceneIdx + 1), true);
+      else if (e.code === "ArrowLeft") jumpToScene(Math.max(0, currentSceneIdx - 1), true);
+    });
+
+    renderFrame();
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
